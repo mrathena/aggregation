@@ -1,0 +1,173 @@
+参考
+http://www.blogjava.net/bolo/archive/2015/03/20/423683.html
+http://www.blogjava.net/bolo/archive/2015/03/25/423826.html
+http://www.blogjava.net/bolo/archive/2015/04/10/424271.html
+
+
+org.mybatis.generator.api.dom.OutputUtilities.xmlIndent() // 
+xmlIndent().70: sb.append("\t"); // 控制生成的xml文件中的缩进, 默认是两个空格, 改成\t
+javaIndent().55: sb.append("\t"); // 控制生成的java文件中的缩进, 默认是四个空格, 改成\t
+
+
+org.mybatis.generator.api.dom.java.Interface.getFormattedContent() // 控制生成mapper类以及格式化
+sb.append(" {");后, sb.append('}');前: 添加[OutputUtilities.newLine(sb);],让生成的第一个方法/最后一个方法与的接口声明之间有一个空行
+
+
+org.mybatis.generator.api.dom.java.InnerClass.getFormattedContent() // 控制生成entity类以及格式化
+sb.append(" {");后, sb.append('}');前: 添加[OutputUtilities.newLine(sb);],让生成的第一个属性与类的声明之间有一个空行
+178-180: 注释掉 // 去掉每个属性之间的空行
+206-208: 注释掉 // 去掉每个getter和setter之间的空行
+
+
+org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.getGeneratedXmlFiles() // 
+218: true改成false // 控制是否合并生成xml文件
+
+
+org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator.getSqlMapElement() // 调整生成Mapper中方法的顺序
+    protected XmlElement getSqlMapElement() {
+        FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
+        progressCallback.startTask(getString(
+                "Progress.12", table.toString())); //$NON-NLS-1$
+        XmlElement answer = new XmlElement("mapper"); //$NON-NLS-1$
+        String namespace = introspectedTable.getMyBatis3SqlMapNamespace();
+        answer.addAttribute(new Attribute("namespace", //$NON-NLS-1$
+                namespace));
+
+        context.getCommentGenerator().addRootComment(answer);
+
+        addResultMapWithoutBLOBsElement(answer);
+        addResultMapWithBLOBsElement(answer);
+        addExampleWhereClauseElement(answer);
+        addMyBatis3UpdateByExampleWhereClauseElement(answer);
+        addBaseColumnListElement(answer);
+        addBlobColumnListElement(answer);
+        addSelectByExampleWithBLOBsElement(answer);
+        addSelectByExampleWithoutBLOBsElement(answer);
+        addDeleteByExampleElement(answer);
+        addCountByExampleElement(answer);
+        addUpdateByExampleSelectiveElement(answer);
+        addUpdateByExampleWithBLOBsElement(answer);
+        addUpdateByExampleWithoutBLOBsElement(answer);
+        addUpdateByPrimaryKeyWithBLOBsElement(answer);
+        
+        // insert
+        addInsertElement(answer);
+        // insertSelective
+        addInsertSelectiveElement(answer);
+        // updateByPrimaryKey
+        addUpdateByPrimaryKeyWithoutBLOBsElement(answer);
+        // updateByPrimaryKeySelective
+        addUpdateByPrimaryKeySelectiveElement(answer);
+        // deleteByPrimaryKey
+        addDeleteByPrimaryKeyElement(answer);
+        // selectByPrimaryKey
+        addSelectByPrimaryKeyElement(answer);
+
+        return answer;
+    }
+
+
+org.mybatis.generator.internal.DefaultCommentGenerator // 注释
+addComment(): 清空 // 给XML文件加注释
+addRootComment(): 清空 // 给XML文件加注释
+	public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
+		if (suppressAllComments) {
+			return;
+		}
+	}
+	public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
+		if (suppressAllComments) {
+			return;
+		}
+	}
+
+	public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
+		if (suppressAllComments) {
+			return;
+		}
+        StringBuilder sb = new StringBuilder();
+        sb.append("/** ")
+        .append(introspectedTable.getFullyQualifiedTable())
+		.append(" */");
+        innerEnum.addJavaDocLine(sb.toString());
+	}
+
+	public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
+		if (suppressAllComments) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		String remarks = introspectedColumn.getRemarks();
+		sb.append("/** ")
+		.append(introspectedTable.getFullyQualifiedTable())
+		.append(".")
+		.append(introspectedColumn.getActualColumnName())
+		.append(remarks != null && remarks.length() > 0 ? " " + remarks : "")
+		.append(" */");
+		field.addJavaDocLine(sb.toString());
+	}
+	public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
+		if (suppressAllComments) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("/** ")
+		.append(introspectedTable.getFullyQualifiedTable())
+		.append(" */");
+		field.addJavaDocLine(sb.toString());
+	}
+
+	public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
+		if (suppressAllComments) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("/** ")
+		.append(introspectedTable.getFullyQualifiedTable())
+		.append(" */");
+		method.addJavaDocLine(sb.toString());
+	}
+
+	public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
+		if (suppressAllComments) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		String remarks = introspectedColumn.getRemarks();
+		sb.append("/** ")
+		.append(introspectedTable.getFullyQualifiedTable())
+		.append(".")
+		.append(introspectedColumn.getActualColumnName())
+		.append(remarks != null && remarks.length() > 0 ? " " + remarks : "")
+		.append(" */");
+		method.addJavaDocLine(sb.toString());
+	}
+	public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
+		if (suppressAllComments) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		String remarks = introspectedColumn.getRemarks();
+		sb.append("/** ")
+		.append(introspectedTable.getFullyQualifiedTable())
+		.append(".")
+		.append(introspectedColumn.getActualColumnName())
+		.append(remarks != null && remarks.length() > 0 ? " " + remarks : "")
+		.append(" */");
+		method.addJavaDocLine(sb.toString());
+	}
+
+
+org.mybatis.generator.internal.DefaultShellCallback.getDirectory() // 
+51-52: 注释掉, 替换成 project.mkdirs(); // 默认不给生成config.xml中targetProject指定的文件夹
+
+
+修改后的报安装到本地Maven仓库
+命令
+mvn install:install-file -DgroupId=com.mrathena -DartifactId=mybatis-generator-core-adjust -Dversion=1.3.2 -Dpackaging=jar -Dfile=D:/mybatis-generator-core-1.3.2.jar
+使用
+<dependency>
+    <groupId>com.mrathena</groupId>
+    <artifactId>mybatis-generator-core-adjust</artifactId>
+    <version>1.3.2</version>
+</dependency>
