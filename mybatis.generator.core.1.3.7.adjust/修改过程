@@ -16,6 +16,7 @@ if (ids.contains(id)) {
 }
 
 org.mybatis.generator.api.MyBatisGenerator.writeGeneratedJavaFile(); // 最终生成java文件的方法,会判断目标文件是否存在,会合并新旧文件
+// 作者预留了合并方法,但是没有实现,这里由我自行实现
 
 
 org.mybatis.generator.internal.DefaultCommentGenerator // 默认注释生成器,写一个子类覆盖必要的方法,扩展配置字段
