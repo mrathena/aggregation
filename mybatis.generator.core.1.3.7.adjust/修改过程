@@ -15,6 +15,9 @@ if (ids.contains(id)) {
     return true;
 }
 
+org.mybatis.generator.api.MyBatisGenerator.writeGeneratedJavaFile(); // 最终生成java文件的方法,会判断目标文件是否存在,会合并新旧文件
+
+
 org.mybatis.generator.internal.DefaultCommentGenerator // 默认注释生成器,写一个子类覆盖必要的方法,扩展配置字段
 org.mybatis.generator.internal.ExtendedCommentGenerator // 自行扩展的注释生成器子类
 
