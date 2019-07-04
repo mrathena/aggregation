@@ -1,19 +1,28 @@
 
-org.mybatis.generator.api.dom.OutputUtilities.xmlIndent() //
-xmlIndent().70: sb.append("\t"); // 控制生成的xml文件中的缩进, 默认是两个空格, 改成\t
-javaIndent().55: sb.append("\t"); // 控制生成的java文件中的缩进, 默认是四个空格, 改成\t
+org.mybatis.generator.api.dom.OutputUtilities.javaIndent(); // 控制生成的java文件中的缩进, 默认是四个空格, 改成\t
+org.mybatis.generator.api.dom.OutputUtilities.xmlIndent(); // 控制生成的xml文件中的缩进, 默认是两个空格, 改成\t
 
-org.mybatis.generator.api.dom.java.Interface.getFormattedContent(int, org.mybatis.generator.api.dom.java.CompilationUnit) // 控制生成mapper类的类体以及格式化
-org.mybatis.generator.api.dom.java.InnerInterface.getFormattedContent(int, org.mybatis.generator.api.dom.java.CompilationUnit); // 控制生成mapper类的方法体以及格式化
-sb.append(" {");后, sb.append('}');前: 添加[OutputUtilities.newLine(sb);],让生成的第一个方法/最后一个方法与的接口声明之间有一个空行
+org.mybatis.generator.api.dom.java.InnerClass.getFormattedContent(); // 让生成的属性与类的声明之间有一个空行
+org.mybatis.generator.api.dom.java.InnerInterface.getFormattedContent(); // 让生成的方法与类的声明之间有一个空行
 
-org.mybatis.generator.api.dom.java.InnerClass.getFormattedContent() // 控制生成entity类以及格式化
--sb.append(" {");后, sb.append('}');前: 添加[OutputUtilities.newLine(sb);],让生成的第一个属性与类的声明之间有一个空行
-288-290: 注释掉 // 去掉每个属性之间的空行
-206-208: 注释掉 // 去掉每个getter和setter之间的空行
+org.mybatis.generator.api.MyBatisGenerator.writeGeneratedXmlFile(); // 最终生成xml文件的方法,会判断目标文件是否存在,会合并新旧文件
+org.mybatis.generator.internal.XmlFileMergerJaxp.getMergedSource(org.xml.sax.InputSource, org.xml.sax.InputSource, java.lang.String);
+// 该方法会合并新旧文件内容,在生成新根节点元素的时候,添加如下代码使所有根节点的子节点都添加一个creater属性,用于判断节点是否有mybatis.generator生成
+if (!isWhiteSpace(node)) {
+    Element element = (Element) newNode;
+    element.setAttribute("creater", "mybatis.generator");
+}
+// 该方法会删除旧的标签,但是结果是删不掉,通过如下代码判断是否为旧的标签
+org.mybatis.generator.internal.XmlFileMergerJaxp.isGeneratedNode();
+String creater = element.getAttribute("creater");
+if ("mybatis.generator".equals(creater)) {
+    return true;
+}
 
+org.mybatis.generator.internal.DefaultCommentGenerator // 默认注释生成器,写一个子类覆盖必要的方法,扩展配置字段
+org.mybatis.generator.internal.ExtendedCommentGenerator // 自行扩展的注释生成器子类
 
-
+org.mybatis.generator.plugins.LombokModelClassPlugin // 自行扩展的Lombok插件,作用于model类的生成过程
 
 
 

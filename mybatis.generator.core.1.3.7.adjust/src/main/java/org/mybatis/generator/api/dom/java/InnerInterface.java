@@ -120,6 +120,7 @@ public class InnerInterface extends JavaElement {
 		}
 
 		sb.append(" {"); //$NON-NLS-1$
+		OutputUtilities.newLine(sb);
 		newLine(sb);
 		indentLevel++;
 
@@ -161,6 +162,7 @@ public class InnerInterface extends JavaElement {
 		newLine(sb);
 		javaIndent(sb, indentLevel);
 		newLine(sb);
+		OutputUtilities.newLine(sb);
 		sb.append('}');
 
 		return sb.toString();

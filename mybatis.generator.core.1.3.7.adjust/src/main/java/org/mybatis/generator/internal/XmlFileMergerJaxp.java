@@ -168,6 +168,10 @@ public class XmlFileMergerJaxp {
             }
 
             Node newNode = existingDocument.importNode(node, true);
+            if (!isWhiteSpace(node)) {
+                Element element = (Element) newNode;
+                element.setAttribute("creater", "mybatis.generator");
+            }
             if (firstChild == null) {
                 existingRootElement.appendChild(newNode);
             } else {
@@ -190,6 +194,12 @@ public class XmlFileMergerJaxp {
 
         if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
+
+            String creater = element.getAttribute("creater");
+            if ("mybatis.generator".equals(creater)) {
+                return true;
+            }
+
             String id = element.getAttribute("id"); //$NON-NLS-1$
             if (id != null) {
                 for (String prefix : MergeConstants.OLD_XML_ELEMENT_PREFIXES) {
