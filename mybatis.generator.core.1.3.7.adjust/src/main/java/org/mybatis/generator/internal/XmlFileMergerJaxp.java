@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -168,10 +169,6 @@ public class XmlFileMergerJaxp {
             }
 
             Node newNode = existingDocument.importNode(node, true);
-            if (!isWhiteSpace(node)) {
-                Element element = (Element) newNode;
-                element.setAttribute("creater", "mybatis.generator");
-            }
             if (firstChild == null) {
                 existingRootElement.appendChild(newNode);
             } else {
@@ -194,13 +191,14 @@ public class XmlFileMergerJaxp {
 
         if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
+            String id = element.getAttribute("id"); //$NON-NLS-1$
 
-            String creater = element.getAttribute("creater");
-            if ("mybatis.generator".equals(creater)) {
+            List<String> ids = Arrays.asList("insert", "insertSelective", "deleteByPrimaryKey", "updateByPrimaryKey",
+                    "updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
+            if (ids.contains(id)) {
                 return true;
             }
 
-            String id = element.getAttribute("id"); //$NON-NLS-1$
             if (id != null) {
                 for (String prefix : MergeConstants.OLD_XML_ELEMENT_PREFIXES) {
                     if (id.startsWith(prefix)) {

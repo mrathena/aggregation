@@ -7,15 +7,11 @@ org.mybatis.generator.api.dom.java.InnerInterface.getFormattedContent(); // 让�
 
 org.mybatis.generator.api.MyBatisGenerator.writeGeneratedXmlFile(); // 最终生成xml文件的方法,会判断目标文件是否存在,会合并新旧文件
 org.mybatis.generator.internal.XmlFileMergerJaxp.getMergedSource(org.xml.sax.InputSource, org.xml.sax.InputSource, java.lang.String);
-// 该方法会合并新旧文件内容,在生成新根节点元素的时候,添加如下代码使所有根节点的子节点都添加一个creater属性,用于判断节点是否有mybatis.generator生成
-if (!isWhiteSpace(node)) {
-    Element element = (Element) newNode;
-    element.setAttribute("creater", "mybatis.generator");
-}
 // 该方法会删除旧的标签,但是结果是删不掉,通过如下代码判断是否为旧的标签
 org.mybatis.generator.internal.XmlFileMergerJaxp.isGeneratedNode();
-String creater = element.getAttribute("creater");
-if ("mybatis.generator".equals(creater)) {
+List<String> ids = Arrays.asList("insert", "insertSelective", "deleteByPrimaryKey", "updateByPrimaryKey",
+                    "updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
+if (ids.contains(id)) {
     return true;
 }
 
@@ -24,7 +20,11 @@ org.mybatis.generator.internal.ExtendedCommentGenerator // 自行扩展的注释
 
 org.mybatis.generator.plugins.LombokModelClassPlugin // 自行扩展的Lombok插件,作用于model类的生成过程
 
-
+org.mybatis.generator.internal.ObjectFactory.getResource();
+// 配置在xml里面的<properties resource="/mybatis.generator/config.properties"/>总是不能被读取到
+if (url == null) {
+    url = ObjectFactory.class.getResource(resource);
+}
 
 
 
