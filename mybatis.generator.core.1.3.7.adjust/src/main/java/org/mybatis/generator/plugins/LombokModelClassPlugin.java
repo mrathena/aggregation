@@ -6,6 +6,7 @@ import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,8 +34,9 @@ public class LombokModelClassPlugin extends PluginAdapter {
 		topLevelClass.getMethods().clear();
 
 		// 干掉ID字段
+		List<String> names = Arrays.asList("id", "createdAt", "createdBy", "updatedAt", "updatedBy");
 		List<Field> fields = topLevelClass.getFields();
-		fields.removeIf(item -> "id".equals(item.getName()));
+		fields.removeIf(item -> names.contains(item.getName()));
 
 		return true;
 	}
