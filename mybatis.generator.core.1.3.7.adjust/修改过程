@@ -17,9 +17,10 @@ if (ids.contains(id)) {
 }
 
 org.mybatis.generator.api.MyBatisGenerator.writeGeneratedJavaFile(); // 最终生成java文件的方法,会判断目标文件是否存在,会合并新旧文件
-// 作者预留了合并方法,但是没有实现,这里由我自行实现
-shellCallback.isMergeSupported()-------->
-// 首先该方法中判断目标文件存在后的判断是否支持合并的代码替换掉,因为原代码直接返回false,
+// 作者预留了合并方法,但是没有实现,这里由我屏蔽该方法
+shellCallback.isMergeSupported()-------->gjf.isMergeable()
+// 首先该方法中判断目标文件存在后的判断是否支持合并的代码替换掉,因为原代码直接返回false
+判断是Model文件还是Mapper文件 // Model文件直接替换,Mapper文件不替换(因为不会发生变化)
 
 
 org.mybatis.generator.internal.DefaultCommentGenerator // 默认注释生成器,写一个子类覆盖必要的方法,扩展配置字段
