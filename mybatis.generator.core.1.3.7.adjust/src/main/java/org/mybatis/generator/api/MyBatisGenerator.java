@@ -317,14 +317,15 @@ public class MyBatisGenerator {
 			}
 
 			if (null == type) {
-				throw new RuntimeException("Java type has error");
+				throw new RuntimeException("Unknown java type: " + type);
 			} else {
 				if ("interface".equals(type)) {
 					// 接口,说明是Mapper,直接返回不替换
-					source = null;
 					return;
 				} else if ("class".equals(type)) {
 					source = gjf.getFormattedContent();
+				} else {
+					throw new RuntimeException("Unknown java type: " + type);
 				}
 			}
 
