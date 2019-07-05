@@ -2,6 +2,7 @@ package org.mybatis.generator.plugins;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
@@ -30,6 +31,10 @@ public class LombokModelClassPlugin extends PluginAdapter {
 		topLevelClass.addAnnotation("@ToString(callSuper = true)");
 
 		topLevelClass.getMethods().clear();
+
+		// 干掉ID字段
+		List<Field> fields = topLevelClass.getFields();
+		fields.removeIf(item -> "id".equals(item.getName()));
 
 		return true;
 	}
