@@ -296,11 +296,11 @@ public class MyBatisGenerator {
 
 			// 判断是Model文件还是Mapper文件
 			// Model文件直接替换,Mapper文件不替换(因为不会发生变化)
+			String name = gjf.getFileName().split("\\.")[0];
 			String type = null;
 			String content = gjf.getFormattedContent();
 			String[] lines = content.split(System.lineSeparator());
 			for (String line : lines) {
-				String name = gjf.getFileName().split(".")[0];
 				boolean hasName = line.contains(name);
 				boolean hasLeft = line.contains("{");
 				boolean hasType = line.contains("class") || line.contains("interface");
@@ -316,42 +316,43 @@ public class MyBatisGenerator {
 				}
 			}
 
-			if (null == type) {
-				throw new RuntimeException("Unknown java type: " + type);
-			} else {
-				if ("interface".equals(type)) {
-					// 接口,说明是Mapper,直接返回不替换
-					return;
-				} else if ("class".equals(type)) {
-					source = gjf.getFormattedContent();
-				} else {
-					throw new RuntimeException("Unknown java type: " + type);
-				}
-			}
-
 			File directory = shellCallback.getDirectory(gjf
 					.getTargetProject(), gjf.getTargetPackage());
 			targetFile = new File(directory, gjf.getFileName());
-//			if (targetFile.exists()) {
-//				if (gjf.isMergeable()) {
+			if (targetFile.exists()) {
+				if (gjf.isMergeable()) {
+
+					if (null == type) {
+						throw new RuntimeException("Unknown java type: " + type);
+					} else {
+						if ("interface".equals(type)) {
+							// 接口,说明是Mapper,直接返回不替换
+							return;
+						} else if ("class".equals(type)) {
+							source = gjf.getFormattedContent();
+						} else {
+							throw new RuntimeException("Unknown java type: " + type);
+						}
+					}
+
 //					source = shellCallback.mergeJavaFile(gjf
 //									.getFormattedContent(), targetFile,
 //							MergeConstants.OLD_ELEMENT_TAGS,
 //							gjf.getFileEncoding());
-//				} else if (shellCallback.isOverwriteEnabled()) {
-//					source = gjf.getFormattedContent();
-//					warnings.add(getString("Warning.11", //$NON-NLS-1$
-//							targetFile.getAbsolutePath()));
-//				} else {
-//					source = gjf.getFormattedContent();
-//					targetFile = getUniqueFileName(directory, gjf
-//							.getFileName());
-//					warnings.add(getString(
-//							"Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
-//				}
-//			} else {
-//				source = gjf.getFormattedContent();
-//			}
+				} else if (shellCallback.isOverwriteEnabled()) {
+					source = gjf.getFormattedContent();
+					warnings.add(getString("Warning.11", //$NON-NLS-1$
+							targetFile.getAbsolutePath()));
+				} else {
+					source = gjf.getFormattedContent();
+					targetFile = getUniqueFileName(directory, gjf
+							.getFileName());
+					warnings.add(getString(
+							"Warning.2", targetFile.getAbsolutePath())); //$NON-NLS-1$
+				}
+			} else {
+				source = gjf.getFormattedContent();
+			}
 
 			callback.checkCancel();
 			callback.startTask(getString(
