@@ -15,13 +15,13 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
+import org.mybatis.generator.api.ShellCallback;
+import org.mybatis.generator.exception.ShellException;
 
 import java.io.File;
 import java.util.StringTokenizer;
 
-import org.mybatis.generator.api.ShellCallback;
-import org.mybatis.generator.exception.ShellException;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * The Class DefaultShellCallback.
@@ -30,89 +30,90 @@ import org.mybatis.generator.exception.ShellException;
  */
 public class DefaultShellCallback implements ShellCallback {
 
-    /** The overwrite. */
-    private boolean overwrite;
+	/** The overwrite. */
+	private boolean overwrite;
 
-    /**
-     * Instantiates a new default shell callback.
-     *
-     * @param overwrite
-     *            the overwrite
-     */
-    public DefaultShellCallback(boolean overwrite) {
-        super();
-        this.overwrite = overwrite;
-    }
+	/**
+	 * Instantiates a new default shell callback.
+	 *
+	 * @param overwrite
+	 *            the overwrite
+	 */
+	public DefaultShellCallback(boolean overwrite) {
+		super();
+		this.overwrite = overwrite;
+	}
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#getDirectory(java.lang.String, java.lang.String)
-     */
-    @Override
-    public File getDirectory(String targetProject, String targetPackage)
-            throws ShellException {
-        // targetProject is interpreted as a directory that must exist
-        //
-        // targetPackage is interpreted as a sub directory, but in package
-        // format (with dots instead of slashes). The sub directory will be
-        // created
-        // if it does not already exist
+	/* (non-Javadoc)
+	 * @see org.mybatis.generator.api.ShellCallback#getDirectory(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public File getDirectory(String targetProject, String targetPackage)
+			throws ShellException {
+		// targetProject is interpreted as a directory that must exist
+		//
+		// targetPackage is interpreted as a sub directory, but in package
+		// format (with dots instead of slashes). The sub directory will be
+		// created
+		// if it does not already exist
 
-        File project = new File(targetProject);
-        if (!project.isDirectory()) {
-            throw new ShellException(getString("Warning.9", //$NON-NLS-1$
-                    targetProject));
-        }
+		File project = new File(targetProject);
+		if (!project.isDirectory()) {
+			throw new ShellException(getString("Warning.9", //$NON-NLS-1$
+					targetProject));
+		}
 
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(targetPackage, "."); //$NON-NLS-1$
-        while (st.hasMoreTokens()) {
-            sb.append(st.nextToken());
-            sb.append(File.separatorChar);
-        }
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(targetPackage, "."); //$NON-NLS-1$
+		while (st.hasMoreTokens()) {
+			sb.append(st.nextToken());
+			sb.append(File.separatorChar);
+		}
 
-        File directory = new File(project, sb.toString());
-        if (!directory.isDirectory()) {
-            boolean rc = directory.mkdirs();
-            if (!rc) {
-                throw new ShellException(getString("Warning.10", //$NON-NLS-1$
-                        directory.getAbsolutePath()));
-            }
-        }
+		File directory = new File(project, sb.toString());
+		if (!directory.isDirectory()) {
+			boolean rc = directory.mkdirs();
+			if (!rc) {
+				throw new ShellException(getString("Warning.10", //$NON-NLS-1$
+						directory.getAbsolutePath()));
+			}
+		}
 
-        return directory;
-    }
+		return directory;
+	}
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#refreshProject(java.lang.String)
-     */
-    @Override
-    public void refreshProject(String project) {
-        // nothing to do in the default shell callback
-    }
+	/* (non-Javadoc)
+	 * @see org.mybatis.generator.api.ShellCallback#refreshProject(java.lang.String)
+	 */
+	@Override
+	public void refreshProject(String project) {
+		// nothing to do in the default shell callback
+	}
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#isMergeSupported()
-     */
-    @Override
-    public boolean isMergeSupported() {
-        return false;
-    }
+	/* (non-Javadoc)
+	 * @see org.mybatis.generator.api.ShellCallback#isMergeSupported()
+	 */
+	@Override
+	public boolean isMergeSupported() {
+		return false;
+	}
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#isOverwriteEnabled()
-     */
-    @Override
-    public boolean isOverwriteEnabled() {
-        return overwrite;
-    }
+	/* (non-Javadoc)
+	 * @see org.mybatis.generator.api.ShellCallback#isOverwriteEnabled()
+	 */
+	@Override
+	public boolean isOverwriteEnabled() {
+		return overwrite;
+	}
 
-    /* (non-Javadoc)
-     * @see org.mybatis.generator.api.ShellCallback#mergeJavaFile(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
-     */
-    @Override
-    public String mergeJavaFile(String newFileSource,
-            File existingFile, String[] javadocTags, String fileEncoding)
-            throws ShellException {
+	/* (non-Javadoc)
+	 * @see org.mybatis.generator.api.ShellCallback#mergeJavaFile(java.lang.String, java.lang.String, java.lang.String[], java.lang.String)
+	 */
+	@Override
+	public String mergeJavaFile(String newFileSource,
+								File existingFile, String[] javadocTags, String fileEncoding)
+			throws ShellException {
         throw new UnsupportedOperationException();
-    }
+	}
+
 }

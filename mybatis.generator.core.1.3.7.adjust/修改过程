@@ -5,24 +5,29 @@ org.mybatis.generator.api.dom.OutputUtilities.xmlIndent(); // 控制生成的xml
 org.mybatis.generator.api.dom.java.InnerClass.getFormattedContent(); // 让生成的属性与类的声明之间有一个空行
 org.mybatis.generator.api.dom.java.InnerInterface.getFormattedContent(); // 让生成的方法与类的声明之间有一个空行
 
+
 org.mybatis.generator.api.MyBatisGenerator.writeGeneratedXmlFile(); // 最终生成xml文件的方法,会判断目标文件是否存在,会合并新旧文件
 org.mybatis.generator.internal.XmlFileMergerJaxp.getMergedSource(org.xml.sax.InputSource, org.xml.sax.InputSource, java.lang.String);
 // 该方法会删除旧的标签,但是结果是删不掉,通过如下代码判断是否为旧的标签
 org.mybatis.generator.internal.XmlFileMergerJaxp.isGeneratedNode();
 List<String> ids = Arrays.asList("insert", "insertSelective", "deleteByPrimaryKey", "updateByPrimaryKey",
-                    "updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
+    "updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
 if (ids.contains(id)) {
     return true;
 }
 
 org.mybatis.generator.api.MyBatisGenerator.writeGeneratedJavaFile(); // 最终生成java文件的方法,会判断目标文件是否存在,会合并新旧文件
 // 作者预留了合并方法,但是没有实现,这里由我自行实现
+shellCallback.isMergeSupported()-------->
+// 首先该方法中判断目标文件存在后的判断是否支持合并的代码替换掉,因为原代码直接返回false,
 
 
 org.mybatis.generator.internal.DefaultCommentGenerator // 默认注释生成器,写一个子类覆盖必要的方法,扩展配置字段
 org.mybatis.generator.internal.ExtendedCommentGenerator // 自行扩展的注释生成器子类
 
+
 org.mybatis.generator.plugins.LombokModelClassPlugin // 自行扩展的Lombok插件,作用于model类的生成过程
+
 
 org.mybatis.generator.internal.ObjectFactory.getResource();
 // 配置在xml里面的<properties resource="/mybatis.generator/config.properties"/>总是不能被读取到
