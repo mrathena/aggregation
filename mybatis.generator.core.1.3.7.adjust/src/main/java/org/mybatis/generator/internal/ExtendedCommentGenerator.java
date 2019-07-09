@@ -33,14 +33,10 @@ public class ExtendedCommentGenerator extends DefaultCommentGenerator {
 	private static final String DATE_TIME_PATTERN = "yyyy/MM/dd HH:mm";
 
 	@Override
-	public void addComment(XmlElement xmlElement) {
-
-	}
+	public void addComment(XmlElement xmlElement) {}
 
 	@Override
-	public void addRootComment(XmlElement rootElement) {
-
-	}
+	public void addRootComment(XmlElement rootElement) {}
 
 	@Override
 	public void addConfigurationProperties(Properties properties) {
@@ -80,6 +76,21 @@ public class ExtendedCommentGenerator extends DefaultCommentGenerator {
 		}
 		sb.append(" */");
 		field.addJavaDocLine(sb.toString());
+	}
+
+	@Override
+	public void addMapperInterfaceComment(Interface topLevelInterface,
+										  IntrospectedTable introspectedTable) {
+		topLevelInterface.addJavaDocLine("/**");
+		topLevelInterface.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable());
+		String remark = introspectedTable.getRemarks();
+		if (StringUtility.stringHasValue(remark)) {
+			topLevelInterface.addJavaDocLine(" * ");
+			topLevelInterface.addJavaDocLine(" * " + remark);
+		}
+		topLevelInterface.addJavaDocLine(" * ");
+		topLevelInterface.addJavaDocLine(" * " + "@author " + getAuthor() + " on " + getDatetime());
+		topLevelInterface.addJavaDocLine(" */");
 	}
 
 	@Override

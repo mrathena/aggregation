@@ -15,17 +15,11 @@
  */
 package org.mybatis.generator.api;
 
+import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.api.dom.xml.XmlElement;
+
 import java.util.Properties;
 import java.util.Set;
-
-import org.mybatis.generator.api.dom.java.CompilationUnit;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.InnerClass;
-import org.mybatis.generator.api.dom.java.InnerEnum;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
  * Implementations of this interface are used to generate comments for the
@@ -154,6 +148,17 @@ public interface CommentGenerator {
     void addSetterComment(Method method,
             IntrospectedTable introspectedTable,
             IntrospectedColumn introspectedColumn);
+
+    /**
+     * Adds the top level interface comment.
+     *
+     * @param topLevelInterface
+     *          the interface
+     * @param introspectedTable
+     *          the introspected table
+     */
+    void addMapperInterfaceComment(Interface topLevelInterface,
+                                   IntrospectedTable introspectedTable);
 
     /**
      * Adds the general method comment.
