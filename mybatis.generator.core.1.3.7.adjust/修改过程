@@ -20,7 +20,8 @@ org.mybatis.generator.api.MyBatisGenerator.writeGeneratedJavaFile(); // 最终�
 // 作者预留了合并方法,但是没有实现,这里由我自行实现
 shellCallback.isMergeSupported()-------->gjf.isMergeable()
 // 首先该方法中判断目标文件存在后的判断是否支持合并的代码替换掉,因为原代码直接返回false
-
+org.mybatis.generator.internal.DefaultShellCallback.mergeJavaFile()
+// 重写合并java方法,以新的为准,加上旧的里面自定义的方法
 
 
 org.mybatis.generator.api.CommentGenerator // 注释生成器接口

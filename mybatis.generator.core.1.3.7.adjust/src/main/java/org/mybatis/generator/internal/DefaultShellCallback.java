@@ -15,10 +15,18 @@
  */
 package org.mybatis.generator.internal;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.exception.ShellException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -112,8 +120,26 @@ public class DefaultShellCallback implements ShellCallback {
 	@Override
 	public String mergeJavaFile(String newFileSource,
 								File existingFile, String[] javadocTags, String fileEncoding)
-			throws ShellException {
-        throw new UnsupportedOperationException();
+			throws ShellException, FileNotFoundException {
+//        throw new UnsupportedOperationException();
+
+		// 本次生成的Java文件内容
+		CompilationUnit newCompilationUnit = JavaParser.parse(newFileSource);
+		// 上次生成的Java文件内容
+		CompilationUnit existCompilationUnit = JavaParser.parse(existingFile);
+
+		List<String> names = Arrays.asList("insert", "insertSelective", "deleteByPrimaryKey", "updateByPrimaryKey",
+				"updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
+		NodeList<BodyDeclaration<?>> memberList = newCompilationUnit.getType(0).getMembers();
+		List<MethodDeclaration> methodList = existCompilationUnit.getType(0).getMethods();
+		for (MethodDeclaration methodDeclaration : methodList) {
+			String name = methodDeclaration.getName().getIdentifier();
+			if (!names.contains(name)) {
+				memberList.add(methodDeclaration);
+			}
+		}
+
+		return newCompilationUnit.toString().replace("    ", "\t").replace("*  ", "* ");
 	}
 
 }

@@ -18,6 +18,7 @@ package org.mybatis.generator.api;
 import org.mybatis.generator.codegen.RootClassInfo;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;
+import org.mybatis.generator.config.MergeConstants;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.ShellException;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -321,24 +322,10 @@ public class MyBatisGenerator {
 			targetFile = new File(directory, gjf.getFileName());
 			if (targetFile.exists()) {
 				if (gjf.isMergeable()) {
-
-					if (null == type) {
-						throw new RuntimeException("Unknown java type: " + type);
-					} else {
-						if ("interface".equals(type)) {
-							// 接口,说明是Mapper,直接返回不替换
-							return;
-						} else if ("class".equals(type)) {
-							source = gjf.getFormattedContent();
-						} else {
-							throw new RuntimeException("Unknown java type: " + type);
-						}
-					}
-
-//					source = shellCallback.mergeJavaFile(gjf
-//									.getFormattedContent(), targetFile,
-//							MergeConstants.OLD_ELEMENT_TAGS,
-//							gjf.getFileEncoding());
+					source = shellCallback.mergeJavaFile(gjf
+									.getFormattedContent(), targetFile,
+							MergeConstants.OLD_ELEMENT_TAGS,
+							gjf.getFileEncoding());
 				} else if (shellCallback.isOverwriteEnabled()) {
 					source = gjf.getFormattedContent();
 					warnings.add(getString("Warning.11", //$NON-NLS-1$
