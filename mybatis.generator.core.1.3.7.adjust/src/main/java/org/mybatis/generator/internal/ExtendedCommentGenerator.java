@@ -67,15 +67,15 @@ public class ExtendedCommentGenerator extends DefaultCommentGenerator {
 	public void addFieldComment(Field field, IntrospectedTable
 			introspectedTable, IntrospectedColumn introspectedColumn) {
 		String remark = introspectedColumn.getRemarks();
+		field.addJavaDocLine("/** ");
 		StringBuilder sb = new StringBuilder();
-		sb.append("/** ");
 		sb.append(introspectedColumn.getActualColumnName());
 		if (StringUtility.stringHasValue(remark)) {
 			sb.append(" ");
 			sb.append(remark);
 		}
-		sb.append(" */");
 		field.addJavaDocLine(sb.toString());
+		field.addJavaDocLine(" */");
 	}
 
 	@Override

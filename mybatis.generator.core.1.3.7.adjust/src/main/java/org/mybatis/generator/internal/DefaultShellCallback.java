@@ -128,6 +128,9 @@ public class DefaultShellCallback implements ShellCallback {
 		// 上次生成的Java文件内容
 		CompilationUnit existCompilationUnit = JavaParser.parse(existingFile);
 
+		// 自定义Mapper.java中的import以原有文件为准
+		newCompilationUnit.setImports(existCompilationUnit.getImports());
+
 		List<String> names = Arrays.asList("insert", "insertSelective", "deleteByPrimaryKey", "updateByPrimaryKey",
 				"updateByPrimaryKeySelective", "selectByPrimaryKey", "BaseResultMap", "Base_Column_List");
 		NodeList<BodyDeclaration<?>> memberList = newCompilationUnit.getType(0).getMembers();
